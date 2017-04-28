@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> shows </title>
+        <link href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <style>
+            pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+            .string { color: navy; }
+            .number { color: darkorange; }
+            .boolean { color: blue; }
+            .null { color: magenta; }
+            .key { color: #b2880a; }
+            ul {
+                list-style-type: none;
+                margin-bottom: 12px;
+                padding: 0;
+                overflow: hidden;
+                background-color: #333;
+            }
+            
+            li {
+                float: left;
+            }
+            
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            
+            li a:hover {
+                background-color: #111;
+            }
+            select{
+                margin: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+          <li><a href="index.html">home</a></li>
+          <li><a href="search.html">movie</a></li>
+          <li><a href="show.html">show</a></li>
+          <li><a href="about.html">about</a></li>
+        </ul>
+        <div style="text-align: center">
+            <input style="height: 30px;" type="text" placeholder="enter show title" size="30" id="title" />
+            season<select style="height: 30px;" id="season"></select>
+            episode<select style="height: 30px;" id="episode"></select>
+            <input class="ui-button ui-widget ui-corner-all" type="submit" id="search" value="search">
+        </div>
+        <div id="data"></div>
+        <span></span>
+        <script>
+           var pickSeason = $("#season");
+           var pickEpisode = $("#episode");
+           $('#season').append($('<option>', {
+                    value: "",
+                    text: "all"
+                }));
+                $('#episode').append($('<option>', {
+                    value: "",
+                    text: "all"
+                }));
+           for (var i = 1; i < 30; i++)
+           {
+               $('#season').append($('<option>', {
+                    value: i,
+                    text: i
+                }));
+                $('#episode').append($('<option>', {
+                    value: i,
+                    text: i
+                }));
+           }
+           var movie;
+           $(document).keypress(function(e) {
+                if(e.which == 13) {
+                    searchForMovie();
+                }
+            });
+           var searchForMovie = function(){
+                var title = $("#title").val();
+                var season = $("#season").val();
+                var episode = $("#episode").val();
+                var url = "https://www.omdbapi.com/?t=" + title + "&season=" + season;
+                if (episode != ""){ url += "&episode=" + episode }
+                console.log(url);
+                $.ajax({
+                    // The URL for the request
+                    url: url,
+                    type: "GET",
+    
+                    // The type of data we expect back
+                    dataType: "json",
+    
+                    //jsonpCallback: 'callback',
+                })
+                .done(function(data) {
+                    movie = data;
+                    console.log(data);
+                    //$("#data").html(JSON.stringify(data));
+                    var str = JSON.stringify(movie, undefined, 4);
+        
+                    output(syntaxHighlight(str));
+                })
+            }
+            $("#search").click(searchForMovie);
+            
+            function output(inp) {
+                document.body.removeChild(document.body.lastChild);
+                document.body.appendChild(document.createElement('pre')).innerHTML = inp;
+            }
+            
+            function syntaxHighlight(json) {
+                json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                    var cls = 'number';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            cls = 'key';
+                        } else {
+                            cls = 'string';
+                        }
+                    } else if (/true|false/.test(match)) {
+                        cls = 'boolean';
+                    } else if (/null/.test(match)) {
+                        cls = 'null';
+                    }
+                    return '<span class="' + cls + '">' + match + '</span>';
+                });
+            }
+           
+
+    </script>
+    </body>
+</html>

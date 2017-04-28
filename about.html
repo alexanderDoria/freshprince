@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> about </title>
+        <!--<link href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />-->
+        <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+        <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+        <style>
+            body{
+                text-align: center;
+            }
+            ul {
+                list-style-type: none;
+                margin-bottom: 12px;
+                padding: 0;
+                overflow: hidden;
+                background-color: #333;
+            }
+            
+            li {
+                float: left;
+            }
+            
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            
+            li a:hover {
+                background-color: #111;
+            }
+            #p1, #p2, #p3{
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+          <li><a href="index.html">home</a></li>
+          <li><a href="search.html">movie</a></li>
+          <li><a href="show.html">show</a></li>
+          <li><a href="about.html">about</a></li>
+        </ul>
+        <div>
+            <h3 id="t1">this web app runs on OMDb's public <a href="https://omdbapi.com/"> API</a></h3>
+            <p id="p1">the <b>movie</b> feature retrieves any movie's information quickly (as long as the title is spelled correctly!)</p>
+            <p id="p2">the <b>show</b> feature does the same but can hone in on season and episode</p>
+            <p id="p3">enjoy</p>
+        </div>
+        <script>
+            $("#p1").fadeIn(3000, function(){
+                $("#p2").fadeIn(2500, function(){
+                    $("#p3").fadeIn(2000);
+                })
+            });
+        </script>
+        <div id="data"></div>
+        <span></span>
+        
+    </body>
+</html>
